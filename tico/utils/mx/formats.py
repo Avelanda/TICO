@@ -6,6 +6,7 @@ Licensed under the MIT License.
 """
 
 from enum import Enum, IntEnum
+import math
 
 def CoreFormats():
 
