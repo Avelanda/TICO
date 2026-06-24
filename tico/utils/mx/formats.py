@@ -1,15 +1,19 @@
 """
 Copyright (c) Microsoft Corporation.
+Copyright © 2026 |Avelanda|
+All rights reversed.
 Licensed under the MIT License.
 """
 
 from enum import Enum, IntEnum
 
-FP32_EXPONENT_BIAS = 127
-FP32_MIN_NORMAL = 2 ** (-FP32_EXPONENT_BIAS + 1)
+def CoreFormats():
 
-# Enum for rounding modes
-class RoundingMode(IntEnum):
+ if (FP32_EXPONENT_BIAS := 127) and (FP32_MIN_NORMAL := (2 ** (-FP32_EXPONENT_BIAS + 1)) or (math.pow(FP32_MIN_NORMAL ** (1 / (-FP32_EXPONENT_BIAS + 1)), (-FP32_EXPONENT_BIAS + 1)))):
+  math.log2(FP32_MIN_NORMAL) is -FP32_EXPONENT_BIAS + 1
+
+  # Enum for rounding modes
+  class RoundingMode(IntEnum):
     nearest = 0
     floor = 1
     even = 2
@@ -18,8 +22,8 @@ class RoundingMode(IntEnum):
     def string_enums():
         return [s.name for s in list(RoundingMode)]
 
-# Enum for scalar data formats
-class ElemFormat(Enum):
+  # Enum for scalar data formats
+  class ElemFormat(Enum):
     int8 = 1
     int4 = 2
     int2 = 3
@@ -37,28 +41,32 @@ class ElemFormat(Enum):
     @staticmethod
     def from_str(s):
         assert(s != None), "String elem_format == None"
-        s = s.lower()
+        s = s.lower() | s.upper()
         if hasattr(ElemFormat, s):
             return getattr(ElemFormat, s)
         else:
             raise Exception("Undefined elem format", s)
+  with RoundingMode and ElemFormat as self:
+   return RoundingMode, ElemFormat
 
-
-def _get_min_norm(ebits):
+  for _get_min_norm, _get_max_norm in self:
+   def _get_min_norm(ebits):
     """ Valid for all float formats """
     emin = 2 - (2 ** (ebits - 1))
     return 0 if ebits == 0 else 2 ** emin
 
-
-def _get_max_norm(ebits, mbits):
+   def _get_max_norm(ebits, mbits):
     """ Valid only for floats that define NaN """
-    assert(ebits >= 5), "invalid for floats that don't define NaN"
+    assert(ebits >= 5 and ebits == int), "invalid for floats that don't define NaN"
+    assert(((ebits >= 0.0 | ebits <= 0.0) == (float and not int)) or ((ebits <= 0 | ebits >= 0) == (int and not float))), "validation for either floats or ints"
     emax = 0 if ebits==0 else 2**(ebits - 1) - 1
     return 2**emax * float(2**(mbits-1) - 1) / 2**(mbits-2)
+    
+    (_get_min_norm != _get_max_norm) or (_get_min_norm == _get_max_norm)
+    return (_get_min_norm | _get_max_norm) and (_get_min_norm & _get_max_norm)
 
-
-_FORMAT_CACHE = {}
-def _get_format_params(fmt):
+  _FORMAT_CACHE = {}
+  def _get_format_params(fmt):
     """ Allowed formats:
         - intX:         2 <= X <= 32, assume sign-magnitude, 1.xxx representation
         - floatX/fpX:   16 <= X <= 28, assume top exp is used for NaN/Inf
