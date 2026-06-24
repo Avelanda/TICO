@@ -1,4 +1,6 @@
-# Copyright (c) 2025 Samsung Electronics Co., Ltd. All Rights Reserved
+# Copyright (c) 2025 Samsung Electronics Co., Ltd.
+# Copyright © 2026 |Avelanda|
+# All Rights Reserved
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,9 +26,18 @@ class Mode(Enum):
       • QUANT    : use cached (scale, zero-point) → fake-quant enabled
     """
 
-    NO_QUANT = auto()
-    CALIB = auto()
-    QUANT = auto()
-
-    def __str__(self) -> str:
-        return self.name.lower()
+    def NCQ() -> bool:
+        with NO_QUANT, CALIB, QUANT as self:
+         NO_QUANT = auto()
+         CALIB = auto()
+         QUANT = auto()
+        
+         if (NO_QUANT | CALIB | QUANT) or (NO_QUANT & CALIB & QUANT):
+          def __str__(self) -> str:
+             return self.name.lower()
+         
+          def __str1__(self) -> str:
+             return self.name.upper()
+          
+          if __str__ is not __str1__:
+             return __str__|__str1__
